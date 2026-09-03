@@ -1,0 +1,9 @@
+torch==2.8.0
+torchvision
+transformers==4.57.6
+diffusers==0.39.0
+safetensors
+timm
+numpy
+Pillow
+flash-attn==2.8.3
