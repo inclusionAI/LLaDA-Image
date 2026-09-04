@@ -60,10 +60,10 @@ This repository provides the checkpoints and Diffusers-based inference code for 
 
 ## Model Zoo
 
-| Model                 | Description                                                                           | Sampling steps | Hugging Face (Checkpoints)                                                                    |
-| --------------------- | ------------------------------------------------------------------------------------- | -------------: | --------------------------------------------------------------------------------------------- |
-| **LLaDA-Image**       | Base model for high-fidelity text-to-image generation and instruction-guided editing. |             50 | **BF16:** [inclusionAI/LLaDA-Image](https://huggingface.co/inclusionAI/LLaDA-Image)<br>**FP8:** [inclusionAI/LLaDA-Image-FP8](https://huggingface.co/inclusionAI/LLaDA-Image-FP8) |
-| **LLaDA-Image-Turbo** | Distilled model for fast generation and editing.                                      |              4 | **BF16:** [inclusionAI/LLaDA-Image-Turbo](https://huggingface.co/inclusionAI/LLaDA-Image-Turbo)<br>**FP8:** [inclusionAI/LLaDA-Image-Turbo-FP8](https://huggingface.co/inclusionAI/LLaDA-Image-Turbo-FP8) |
+| Model                 | Description                                                                           | Sampling steps | Hugging Face (Checkpoints)                                                                    | ModelScope (Checkpoints)                                                                          |
+| --------------------- | ------------------------------------------------------------------------------------- | -------------: | --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| **LLaDA-Image**       | Base model for high-fidelity text-to-image generation and instruction-guided editing. |             50 | **BF16:** [inclusionAI/LLaDA-Image](https://huggingface.co/inclusionAI/LLaDA-Image)<br>**FP8:** [inclusionAI/LLaDA-Image-FP8](https://huggingface.co/inclusionAI/LLaDA-Image-FP8) | **BF16:** [inclusionAI/LLaDA-Image](https://modelscope.cn/models/inclusionAI/LLaDA-Image)<br>**FP8:** [inclusionAI/LLaDA-Image-FP8](https://modelscope.cn/models/inclusionAI/LLaDA-Image-FP8) |
+| **LLaDA-Image-Turbo** | Distilled model for fast generation and editing.                                      |              4 | **BF16:** [inclusionAI/LLaDA-Image-Turbo](https://huggingface.co/inclusionAI/LLaDA-Image-Turbo)<br>**FP8:** [inclusionAI/LLaDA-Image-Turbo-FP8](https://huggingface.co/inclusionAI/LLaDA-Image-Turbo-FP8) | **BF16:** [inclusionAI/LLaDA-Image-Turbo](https://modelscope.cn/models/inclusionAI/LLaDA-Image-Turbo)<br>**FP8:** [inclusionAI/LLaDA-Image-Turbo-FP8](https://modelscope.cn/models/inclusionAI/LLaDA-Image-Turbo-FP8) |
 
 ## Opensource Plan
 
