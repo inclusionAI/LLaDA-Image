@@ -10,7 +10,11 @@
   <a href="https://huggingface.co/inclusionAI/LLaDA-Image"><img src="https://img.shields.io/badge/Hugging%20Face-Base-FFD21E?logo=huggingface" alt="LLaDA-Image Base on Hugging Face"></a>
   <a href="https://huggingface.co/inclusionAI/LLaDA-Image-FP8"><img src="https://img.shields.io/badge/Hugging%20Face-Base--FP8-FFD21E?logo=huggingface" alt="LLaDA-Image Base FP8 Version on Hugging Face"></a>
   <a href="https://huggingface.co/inclusionAI/LLaDA-Image-Turbo"><img src="https://img.shields.io/badge/Hugging%20Face-Turbo-FFD21E?logo=huggingface" alt="LLaDA-Image Turbo on Hugging Face"></a>
-  <a href="https://huggingface.co/inclusionAI/LLaDA-Image-Turbo-FP8"><img src="https://img.shields.io/badge/Hugging%20Face-Turbo--FP8-FFD21E?logo=huggingface" alt="LLaDA-Image Turbo FP8 Version on Hugging Face"></a>
+  <a href="https://huggingface.co/inclusionAI/LLaDA-Image-Turbo-FP8"><img src="https://img.shields.io/badge/Hugging%20Face-Turbo--FP8-FFD21E?logo=huggingface" alt="LLaDA-Image Turbo FP8 Version on Hugging Face"></a><br>
+    <a href="https://modelscope.cn/models/inclusionAI/LLaDA-Image"><img src="https://img.shields.io/badge/🤖%20Model%20Scope-Base-624aff" alt="LLaDA-Image Base on Modelscope"></a>
+  <a href="https://modelscope.cn/models/inclusionAI/LLaDA-Image-FP8"><img src="https://img.shields.io/badge/🤖%20Model%20Scope-Base--FP8-624aff" alt="LLaDA-Image Base FP8 Version on Modelscope"></a>
+  <a href="https://modelscope.cn/models/inclusionAI/LLaDA-Image-Turbo"><img src="https://img.shields.io/badge/🤖%20Model%20Scope-Turbo-624aff" alt="LLaDA-Image Turbo on Modelscope"></a>
+  <a href="https://modelscope.cn/models/inclusionAI/LLaDA-Image-Turbo-FP8"><img src="https://img.shields.io/badge/🤖%20Model%20Scope-Turbo--FP8-624aff" alt="LLaDA-Image Turbo FP8 Version on Modelscope"></a>
 </p>
 
 <p align="center">
