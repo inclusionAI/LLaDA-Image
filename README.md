@@ -6,7 +6,7 @@
 
 <p align="center">
   <a href="https://github.com/inclusionAI/LLaDA-Image"><img src="https://img.shields.io/badge/GitHub-LLaDA--Image-181717?logo=github" alt="GitHub"></a>
-  <a href="#"><img src="https://img.shields.io/badge/arXiv-Coming%20Soon-B31B1B?logo=arxiv" alt="arXiv"></a><br>
+    <a href="https://arxiv.org/pdf/2609.03796"><img src="https://img.shields.io/badge/arXiv-Report-B31B1B?logo=arxiv" alt="arXiv"></a><br>
   <a href="https://huggingface.co/inclusionAI/LLaDA-Image"><img src="https://img.shields.io/badge/Hugging%20Face-Base-FFD21E?logo=huggingface" alt="LLaDA-Image Base on Hugging Face"></a>
   <a href="https://huggingface.co/inclusionAI/LLaDA-Image-FP8"><img src="https://img.shields.io/badge/Hugging%20Face-Base--FP8-FFD21E?logo=huggingface" alt="LLaDA-Image Base FP8 Version on Hugging Face"></a>
   <a href="https://huggingface.co/inclusionAI/LLaDA-Image-Turbo"><img src="https://img.shields.io/badge/Hugging%20Face-Turbo-FFD21E?logo=huggingface" alt="LLaDA-Image Turbo on Hugging Face"></a>
@@ -202,7 +202,7 @@ If you find LLaDA-Image useful for your research or applications, please conside
 @article{LLaDAImage,
 title = {LLaDA-Image: Building Strong Image Generators with Fully Open Training Recipes},
 author = {Chuyan Chen and Haoxing Chen and Kun Chen and Zhenglin Cheng and Long Cui and Ruishan Fang and Zhangxuan Gu and Zhicheng Huang and Zhenzhong Lan and Yuanting Lei and Haoquan Li and Jianguo Li and Rongchuan Li and Sidu Li and Tao Lin and Deyuan Liu and Jiacheng Liu and Lin Liu and Yuxuan Lou and Zhisheng Lu and Yuxin Ma and Shuheng Shen and Peng Sun and Chaoyang Wang and Hongjun Wang and Xiaomei Wang and Yongxin Wang and Chengzhang Wu and Hongru Wu and Jun Xie},
-journal = {arXiv preprint},
+journal = {arXiv preprint arXiv:2609.03796},
 year = {2026}
 }
 ```
