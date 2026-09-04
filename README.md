@@ -131,6 +131,9 @@ image.save("llada-image-base.png")
 
 Use the Turbo checkpoint for fast generation and editing. Its recommended sampling configuration is **4 steps**.
 
+> [!NOTE]
+> For LLaDA-Image-Turbo inference, you can try setting `stochastic_sampling` to `false` in `scheduler/scheduler_config.json`, which may produce sharper details in some cases.
+
 ```python
 import torch
 
