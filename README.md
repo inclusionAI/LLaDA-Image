@@ -43,6 +43,7 @@ This repository provides the checkpoints and Diffusers-based inference code for 
 
 ## News
 
+- **2026-09-07:** Thanks to [@Rebel AI](https://huggingface.co/realrebelai), the Comfy UI for [LLaDA-Image](https://huggingface.co/realrebelai/LLaDa-Image_ComfyUI) and [LLaDA-Image-Turbo](https://huggingface.co/realrebelai/LLaDa-Image-Turbo_ComfyUI) and its FB8 version is supported.
 - **2026-09-04:** We released the LLaDA-Image Base and Turbo checkpoints together with the inference code.
 
 ## Highlights
