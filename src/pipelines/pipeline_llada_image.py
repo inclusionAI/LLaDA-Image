@@ -26,6 +26,7 @@ from diffusers.schedulers import FlowMatchEulerDiscreteScheduler
 from diffusers.utils import logging
 from diffusers.utils.torch_utils import randn_tensor
 
+from src.device_utils import resolve_device, resolve_dtype
 from src.models import (
     LLaDAImageQueryFormerModel,
     LLaDAImageSigVQModel,
@@ -104,7 +105,12 @@ class LLaDAImagePipeline(DiffusionPipeline):
 
         This model stores a LLaDA2 text encoder that requires `trust_remote_code=True`, so its components are loaded
         explicitly instead of relying on the generic Diffusers pipeline resolver.
+
+        `device` defaults to the best available accelerator: CUDA, then Apple Silicon MPS, then CPU. Pass an explicit
+        device to override that choice. `torch_dtype` defaults to bfloat16 on accelerators and float32 on CPU.
         """
+        device = resolve_device(device)
+        torch_dtype = resolve_dtype(torch_dtype, device)
         model_path = Path(pretrained_model_name_or_path)
         if not model_path.is_dir():
             from huggingface_hub import snapshot_download
@@ -119,9 +125,13 @@ class LLaDAImagePipeline(DiffusionPipeline):
 
         scheduler = FlowMatchEulerDiscreteScheduler.from_pretrained(model_path / "scheduler")
         vae = AutoencoderKLFlux2.from_pretrained(model_path / "vae", torch_dtype=torch_dtype)
-        text_encoder_kwargs = {"dtype": torch_dtype, "trust_remote_code": True}
-        if device is not None:
-            text_encoder_kwargs["device_map"] = {"": device}
+        # `device_map` streams the text encoder shards straight onto the target device, which keeps the largest
+        # component (~32 GB in bfloat16) from being materialized in host RAM first.
+        text_encoder_kwargs = {
+            "dtype": torch_dtype,
+            "trust_remote_code": True,
+            "device_map": {"": str(device)},
+        }
         text_encoder = AutoModel.from_pretrained(model_path / "text_encoder", **text_encoder_kwargs)
         tokenizer = AutoTokenizer.from_pretrained(model_path / "tokenizer")
         queryformer = LLaDAImageQueryFormerModel.from_pretrained(model_path / "queryformer", torch_dtype=torch_dtype)
@@ -131,12 +141,11 @@ class LLaDAImagePipeline(DiffusionPipeline):
         sigvq = LLaDAImageSigVQModel.from_pretrained(model_path / "sigvq", torch_dtype=torch_dtype)
         transformer = LLaDAImageTransformer2DModel.from_pretrained(model_path / "transformer", torch_dtype=torch_dtype)
 
-        if device is not None:
-            vae = vae.to(device)
-            queryformer = queryformer.to(device)
-            text_projection = text_projection.to(device)
-            sigvq = sigvq.to(device)
-            transformer = transformer.to(device)
+        vae = vae.to(device)
+        queryformer = queryformer.to(device)
+        text_projection = text_projection.to(device)
+        sigvq = sigvq.to(device)
+        transformer = transformer.to(device)
 
         return cls(
             scheduler=scheduler,
