@@ -1,3 +1,4 @@
+from .device_utils import resolve_device, resolve_dtype
 from .models import (
     LLaDAImageQueryFormerModel,
     LLaDAImageSigVQModel,
@@ -13,4 +14,6 @@ __all__ = [
     "LLaDAImageSigVQModel",
     "LLaDAImageTextProjectionModel",
     "LLaDAImageTransformer2DModel",
+    "resolve_device",
+    "resolve_dtype",
 ]

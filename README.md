@@ -87,6 +87,45 @@ conda activate llada-image
 pip install -r requirements.txt
 ```
 
+> [!NOTE]
+> The pinned Transformers version matters: the LLaDA2 text encoder ships remote code that imports symbols removed in
+> Transformers 5.x. Install into a clean environment rather than an existing one.
+
+### Apple Silicon
+
+The model runs on Apple Silicon through the PyTorch MPS backend, with no CUDA toolkit and no `flash-attn` build.
+Every attention path in the stack — the DiT, the QueryFormer, the text projection, the SigVQ encoder, and the LLaDA2
+text encoder — resolves to `torch.nn.functional.scaled_dot_product_attention`, which MPS implements natively.
+
+`from_pretrained` selects the accelerator automatically, preferring CUDA, then MPS, then CPU:
+
+```python
+from src import LLaDAImagePipeline, resolve_device
+
+device = resolve_device()          # torch.device("mps") on Apple Silicon
+pipe = LLaDAImagePipeline.from_pretrained("inclusionAI/LLaDA-Image", device=device)
+```
+
+Pass an explicit `device=` to override the choice, and `DEVICE=mps` (or `cpu`, `cuda`) to `scripts/run_llada_image.sh`.
+
+**Memory.** The BF16 checkpoint holds every component resident on the device at once:
+
+| Component | BF16 size |
+| --- | ---: |
+| `text_encoder` (LLaDA2 MoE, 256 experts) | 32.65 GB |
+| `transformer` (DiT) | 13.08 GB |
+| `sigvq` | 2.59 GB |
+| `text_projection`, `vae`, `queryformer` | 0.92 GB |
+| **Total** | **49.24 GB** |
+
+Plan on 64 GB of unified memory as a practical floor for 1024x1024 generation, and expect memory pressure near that
+floor once activations are added. Lower `height`/`width`, or use an FP8 checkpoint, if you have less.
+
+**MoE backend.** The text encoder's fused MoE has a Triton kernel gated on CUDA tensors, and falls back automatically
+to an eager PyTorch path on MPS — set `LLADA_MOE_BACKEND=eager` to force it. The fallback loops over experts, so
+prompt encoding is slower than on CUDA. In `text` mode it runs once per image rather than once per denoising step, so
+it costs a fixed amount per generation.
+
 ### 2. Run inference
 
 The pipeline accepts a prompt and, for editing, an optional reference image.
@@ -98,13 +137,16 @@ Use the Base checkpoint for high-fidelity generation and editing. Its recommende
 ```python
 import torch
 
-from src import LLaDAImagePipeline
+from src import LLaDAImagePipeline, resolve_device
+
+# Picks CUDA, then Apple Silicon MPS, then CPU. Pass a device explicitly to override.
+device = resolve_device()
 
 # Load the pipeline. The model is downloaded from Hugging Face on first use.
 pipe = LLaDAImagePipeline.from_pretrained(
     "inclusionAI/LLaDA-Image",
     torch_dtype=torch.bfloat16,
-    device="cuda",
+    device=device,
 )
 
 # Generate an image.
@@ -122,7 +164,7 @@ image = pipe(
     width=1024,
     num_inference_steps=50,
     guidance_scale=5.0,
-    generator=torch.Generator("cuda").manual_seed(42),
+    generator=torch.Generator(device).manual_seed(42),
 ).images[0]
 
 image.save("llada-image-base.png")
@@ -138,13 +180,15 @@ Use the Turbo checkpoint for fast generation and editing. Its recommended sampli
 ```python
 import torch
 
-from src import LLaDAImagePipeline
+from src import LLaDAImagePipeline, resolve_device
+
+device = resolve_device()
 
 # Load the distilled Turbo checkpoint.
 pipe = LLaDAImagePipeline.from_pretrained(
     "inclusionAI/LLaDA-Image-Turbo",
     torch_dtype=torch.bfloat16,
-    device="cuda",
+    device=device,
 )
 
 prompt = "A quiet observatory above a sea of clouds at sunrise, golden light, wide-angle photograph"
@@ -156,7 +200,7 @@ image = pipe(
     width=1024,
     num_inference_steps=4,
     guidance_scale=1.0,
-    generator=torch.Generator("cuda").manual_seed(42),
+    generator=torch.Generator(device).manual_seed(42),
 ).images[0]
 
 image.save("llada-image-turbo.png")
@@ -176,7 +220,7 @@ image = pipe(
     width=1024,
     num_inference_steps=50,  # Use 4 for LLaDA-Image-Turbo.
     guidance_scale=5.0,  # Use 1.0 for few-step inference.
-    generator=torch.Generator("cuda").manual_seed(42),
+    generator=torch.Generator(device).manual_seed(42),
 ).images[0]
 ```
 
@@ -194,7 +238,7 @@ image = pipe(
     width=1024,
     num_inference_steps=50,  # Use 4 for LLaDA-Image-Turbo.
     guidance_scale=5.0,  # Use 1.0 for few-step inference.
-    generator=torch.Generator("cuda").manual_seed(43),
+    generator=torch.Generator(device).manual_seed(43),
 ).images[0]
 ```
 

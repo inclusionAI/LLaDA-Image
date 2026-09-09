@@ -8,7 +8,7 @@ OUTPUT_ROOT="${OUTPUT_ROOT:-$REPO_ROOT/outputs}"
 MODEL_PATH="${MODEL_PATH:-}"
 HF_REPO_ID="${HF_REPO_ID:-}"
 HF_REVISION="${HF_REVISION:-main}"
-DEVICE="${DEVICE:-cuda}"
+DEVICE="${DEVICE:-auto}"
 HEIGHT="${HEIGHT:-1024}"
 WIDTH="${WIDTH:-1024}"
 STEPS="${STEPS:-50}"
@@ -20,6 +20,8 @@ if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
     echo "  Text-to-image: GENERATION_MODE=text $0 \"a red fox in the snow\""
     echo "  MLLM VQ-conditioned: GENERATION_MODE=vq $0 \"a red fox in the snow\""
     echo "  Image editing: GENERATION_MODE=editing $0 \"turn it into a watercolor painting\" /path/to/input.png"
+    echo ""
+    echo "  DEVICE defaults to auto (CUDA, then Apple Silicon MPS, then CPU); set DEVICE=mps|cuda|cpu to override."
     exit 0
 fi
 
@@ -79,7 +81,7 @@ import sys
 import torch
 
 from diffusers.utils import load_image
-from src import LLaDAImagePipeline
+from src import LLaDAImagePipeline, resolve_device
 
 
 (
@@ -95,7 +97,12 @@ from src import LLaDAImagePipeline
     guidance_scale,
     seed,
 ) = sys.argv[1:]
-pipeline = LLaDAImagePipeline.from_pretrained(model_path, torch_dtype=torch.bfloat16, device=device)
+device = resolve_device(device)
+print(f"Running on {device}.", flush=True)
+
+# bfloat16 on CUDA and MPS; float32 on CPU, where bfloat16 is emulated and far too slow for a model this size.
+dtype = torch.float32 if device.type == "cpu" else torch.bfloat16
+pipeline = LLaDAImagePipeline.from_pretrained(model_path, torch_dtype=dtype, device=device)
 kwargs = {
     "prompt": prompt,
     "generation_mode": generation_mode,
